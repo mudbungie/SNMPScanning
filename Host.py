@@ -45,8 +45,11 @@ class Host:
         except easysnmp.exceptions.EasySNMPNoSuchNameError:
             print('NO MATCH FOR ' + mib)
 
-    def getArpTable(self, mib):
+    def getArpTable(self):
         # Scan the target's ARP table, return a list of IP, MAC tuples
+        
+        # This MIB contains the ARP table
+        mib = 'ipNetToMediaPhysAddress'
         timestamp = datetime.now()
         responses = self.walk(mib)
         # We're going to make a dict out of the values, because that has to happen
@@ -62,6 +65,6 @@ class Host:
 
 if __name__ == '__main__':
     a = Host('10.11.0.1')
-    b = a.getArpTable('ipNetToMediaPhysAddress')
+    b = a.getArpTable()
     for arp in b:
         print('MAC ' + arp['mac'] + ' is assigned to IP ' + arp['ip'])
