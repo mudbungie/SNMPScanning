@@ -56,7 +56,7 @@ class Host:
             values = {}
             values['mac'] = self.decodeMac(response.value)
             values['ip'] = self.decodeIP(response.oid_index)
-            values['timestamp'] = (mac, timestamp)
+            values['timestamp'] = timestamp
             arpTable.append(values)
         return arpTable
 
