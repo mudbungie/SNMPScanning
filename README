@@ -1,4 +1,4 @@
-Designed to scan networks specified in a config file, produce database mapping of IP, MAC, and a tiemstamp for when the scan ran. Single-threaded, so if you want, it can run continuously, to keep things up to date. Will dump the data into probably postgresql, but that's configurable.
+Designed to scan networks specified in a config file, produce database mapping of IP, MAC, and a timestamp for when the scan ran. Single-threaded, so if you want, it can run continuously, to keep things up to date. Will dump the data into probably postgresql, but that's configurable.
 
 Network.py
     Iterates on the addresses in its network
@@ -8,3 +8,10 @@ Crawl.py
     Runs the system in a loop
 Check.py
     Externally callable program to do a lookup on an IP or range
+
+Requires:
+    psycopg2
+    sqlalchemy
+    easysnmp
+
+

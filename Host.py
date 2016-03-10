@@ -6,6 +6,7 @@ import easysnmp.exceptions
 from ipaddress import IPv4Address, AddressValueError
 from Config import config
 from binascii import hexlify
+from datetime import datetime
 
 class Host:
     def __init__(self, ip):
@@ -46,18 +47,21 @@ class Host:
 
     def getArpTable(self, mib):
         # Scan the target's ARP table, return a list of IP, MAC tuples
-            responses = self.walk(mib)
-            arpTable = []
-            for response in responses:
-                # They come back all munged together, so I have to do some string hacking
-                mac = self.decodeMac(response.value)
-                ip = self.decodeIP(response.oid_index)
-                arp = (mac, ip)
-                arpTable.append(arp)
-            return arpTable
+        timestamp = datetime.now()
+        responses = self.walk(mib)
+        # We're going to make a dict out of the values, because that has to happen
+        # before a database insert one way or another. 
+        arpTable = []
+        for response in responses:
+            values = {}
+            values['mac'] = self.decodeMac(response.value)
+            values['ip'] = self.decodeIP(response.oid_index)
+            values['timestamp'] = (mac, timestamp)
+            arpTable.append(values)
+        return arpTable
 
 if __name__ == '__main__':
     a = Host('10.11.0.1')
     b = a.getArpTable('ipNetToMediaPhysAddress')
     for arp in b:
-        print('MAC ' + arp[0] + ' is assigned to IP ' + arp[1])
+        print('MAC ' + arp['mac'] + ' is assigned to IP ' + arp['ip'])
